@@ -108,7 +108,6 @@ class Main extends React.Component{
 		return(
 
 			<View style={styles.mainContainer}>
-			<Text style={styles.title}>ENTERTAINMENT</Text>
 
 			<Video source={{uri: 'http://cf.c.ooyala.com/xwbDc2cTpLVpKwBVzQr-6SiY23OJ3Ooi/DOcJ-FxaFrRg4gtDIwOmk2OjBrO97z6k?_=l8azlu9pb9'}}
 				rate={1.0}
@@ -117,69 +116,14 @@ class Main extends React.Component{
 				resizeMode='cover'
 				style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}/>
 
-				<View style={styles.categoryRow}>
-					<View style={styles.categoryItem}>
-						<TouchableHighlight onPress={this.handleCategory.bind(this, 'movies')}>
-							<Image style={styles.categoriesImg} source={{uri: 'http://s2.r29static.com/bin/entry/8ec/220x264,80/1408032/pip-open.jpg'}}>
-								<View style={{backgroundColor: '#363380', width:188, height:188, opacity:0.8}}>
-									<Text style={styles.categories}>Movies</Text>
-								</View>
-							</Image>
-						</TouchableHighlight>
-					</View>
-					<View style={styles.categoryItem}>
-						<TouchableHighlight onPress={this.handleCategory.bind(this, 'music')}>
-							<Image style={styles.categoriesImg} source={{uri: 'http://s3.r29static.com/bin/entry/182/220x264/1404470/weepies-opener-malloryheyer.png'}}>
-								<View style={{backgroundColor: '#363380', width:188, height:188, opacity:0.8}}>
-									<Text style={styles.categories}>Music</Text>
-								</View>
-							</Image>
-						</TouchableHighlight>
-					</View>
-				</View>
-
-				<View style={styles.categoryRow}>
-					<View style={styles.categoryItem}>
-						<TouchableHighlight onPress={this.handleCategory.bind(this, 'tv-shows')}>
-							<Image style={styles.categoriesImg} source={{uri: 'http://s1.r29static.com/bin/entry/193/220x264,80/1282582/opener-3.jpg'}}>
-								<View style={{backgroundColor: '#363380', width:188, height:188, opacity:0.8}}>
-									<Text style={styles.categories}>TV Shows</Text>
-								</View>
-							</Image>
-						</TouchableHighlight>
-					</View>
-					<View style={styles.categoryItem}>
-						<TouchableHighlight onPress={this.handleCategory.bind(this, 'celebrities')}>
-							<Image style={styles.categoriesImg} source={{uri: 'http://s2.r29static.com/bin/entry/446/220x264,80/1382981/unnamed.jpg'}}>
-								<View style={{backgroundColor: '#363380', width:188, height:188, opacity:0.8}}>
-									<Text style={styles.categories}>Celebrities</Text>
-								</View>
-							</Image>
-						</TouchableHighlight>
-					</View>
-				</View>
-
-				<View style={styles.categoryRow}>
-					<View style={styles.categoryItem}>
+				
+				<View style={{backgroundColor: '#363380', opacity: 0.8, flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+					<View style={{height: 565, width: 330, borderWidth: 2, borderColor: '#fff', alignSelf: 'center'}}>
 						<TouchableHighlight onPress={this.handleCategory.bind(this, 'style-out-there')}>
-							<Image style={styles.categoriesImg} source={{uri: 'http://s2.r29static.com/bin/entry/254/720x389,80/1307706/image.jpg'}}>
-								<View style={{backgroundColor: '#363380', width:188, height:188, opacity:0.8}}>
-									<Text style={styles.categories}>Style Out There</Text>
-								</View>
-							</Image>
-						</TouchableHighlight>
-					</View>
-					<View style={styles.categoryItem}>
-						<TouchableHighlight onPress={this.handleCategory.bind(this, 'trans-america')}>
-							<Image style={styles.categoriesImg} source={{uri: 'http://s2.r29static.com/bin/entry/e32/314x377,80/1383420/transamerica-opener02.jpg'}}>
-								<View style={{backgroundColor: '#363380', width:188, height:188, opacity:0.8}}>
-									<Text style={styles.categories}>Trans America</Text>
-								</View>
-							</Image>
+							<Text style={{marginTop: 270, color: 'white', fontFamily: 'BrownStd-Regular', fontSize: 30, alignSelf: 'center', textAlign: 'center'}}>Style Out There</Text>
 						</TouchableHighlight>
 					</View>
 				</View>
-
 
 
 			</View>
