@@ -27,6 +27,7 @@
 		92CE4DFC1B0A68060080E34F /* BrownStd-RegularTwo.otf in Resources */ = {isa = PBXBuildFile; fileRef = 92CE4DFB1B0A68060080E34F /* BrownStd-RegularTwo.otf */; };
 		92CE4DFE1B0A7C8D0080E34F /* PlayfairDisplay-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92CE4DFD1B0A7C8D0080E34F /* PlayfairDisplay-Bold.ttf */; };
 		92CE4E051B0B7B2B0080E34F /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92CE4E041B0B7B050080E34F /* libRCTVideo.a */; };
+		92CE4E0C1B0C13FA0080E34F /* libRCTAnimationExperimental.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92CE4E0B1B0C13CD0080E34F /* libRCTAnimationExperimental.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +122,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RCTVideo;
 		};
+		92CE4E0A1B0C13CD0080E34F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92CE4E061B0C13CD0080E34F /* RCTAnimationExperimental.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTAnimationExperimental;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -149,6 +157,7 @@
 		92CE4DFB1B0A68060080E34F /* BrownStd-RegularTwo.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BrownStd-RegularTwo.otf"; sourceTree = "<group>"; };
 		92CE4DFD1B0A7C8D0080E34F /* PlayfairDisplay-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PlayfairDisplay-Bold.ttf"; sourceTree = "<group>"; };
 		92CE4DFF1B0B7B050080E34F /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVideo.xcodeproj; path = "node_modules/react-native-video/RCTVideo.xcodeproj"; sourceTree = "<group>"; };
+		92CE4E061B0C13CD0080E34F /* RCTAnimationExperimental.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimationExperimental.xcodeproj; path = "node_modules/react-native/Libraries/Animation/RCTAnimationExperimental.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92CE4E0C1B0C13FA0080E34F /* libRCTAnimationExperimental.a in Frameworks */,
 				92CE4E051B0B7B2B0080E34F /* libRCTVideo.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
@@ -297,6 +307,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				92CE4E061B0C13CD0080E34F /* RCTAnimationExperimental.xcodeproj */,
 				92CE4DFF1B0B7B050080E34F /* RCTVideo.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -346,6 +357,14 @@
 			isa = PBXGroup;
 			children = (
 				92CE4E041B0B7B050080E34F /* libRCTVideo.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		92CE4E071B0C13CD0080E34F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				92CE4E0B1B0C13CD0080E34F /* libRCTAnimationExperimental.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -422,6 +441,10 @@
 				{
 					ProductGroup = 00C302B01ABCB8E700DB3ED1 /* Products */;
 					ProjectRef = 00C302AF1ABCB8E700DB3ED1 /* RCTAdSupport.xcodeproj */;
+				},
+				{
+					ProductGroup = 92CE4E071B0C13CD0080E34F /* Products */;
+					ProjectRef = 92CE4E061B0C13CD0080E34F /* RCTAnimationExperimental.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302B61ABCB90400DB3ED1 /* Products */;
@@ -555,6 +578,13 @@
 			fileType = archive.ar;
 			path = libRCTVideo.a;
 			remoteRef = 92CE4E031B0B7B050080E34F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		92CE4E0B1B0C13CD0080E34F /* libRCTAnimationExperimental.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTAnimationExperimental.a;
+			remoteRef = 92CE4E0A1B0C13CD0080E34F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

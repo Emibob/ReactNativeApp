@@ -10,7 +10,11 @@ var helpers = {
 			.replace(/<\/em>/g, "");
 	},
 	formatTitle(str){
-		return str.replace(/-/g, ' ').toUpperCase();
+		if(str){
+			return str.replace(/-/g, ' ');
+		} else {
+			return;
+		}
 	}
 }
 

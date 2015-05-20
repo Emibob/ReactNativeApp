@@ -13,6 +13,7 @@ var {
   Text,
   NavigatorIOS,
   View,
+  StatusBarIOS
 } = React;
 
 var styles = StyleSheet.create({

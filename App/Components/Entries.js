@@ -142,7 +142,7 @@ class Entries extends React.Component{
 	}
 	buildNewStories(entries){
 		var moreList = entries.map((item, index) => {
-			if(entries[index].sections){
+			if(entries[index].sections && entries[index].main_image){
 			return (
 				<View key={index}>
 					<View style={styles.rowContainer}>
