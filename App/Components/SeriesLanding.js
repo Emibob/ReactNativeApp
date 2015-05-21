@@ -43,7 +43,7 @@ var styles = StyleSheet.create({
 	},
 	colorFilter: {
 		backgroundColor: '#363380', 
-		opacity: 0.7, 
+		opacity: 0.8, 
 		flex: 1, 
 		justifyContent: 'center', 
 		alignItems: 'center'
@@ -140,8 +140,8 @@ class SeriesLanding extends React.Component{
 	}
 	
 	componentWillMount(){
-		var firstCard = this.state.nextModel.full_cards[0],
-				secondCard = this.state.nextModel.full_cards[1],
+		var firstCard = this.state.nextModel.full_cards[1],
+				secondCard = this.state.nextModel.full_cards[2],
 				description = (firstCard.excerpt) ? firstCard.excerpt : secondCard.excerpt,
 				title = (firstCard.meta.title) ? firstCard.meta.title : secondCard.meta.title,
 				fallbackImage = (firstCard.main_image) ? firstCard.main_image.src : secondCard.main_image.src,

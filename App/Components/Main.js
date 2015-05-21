@@ -6,6 +6,8 @@ var helpers = require('../Utils/helpers');
 var Video = require('react-native-video');
 var AnimationExperimental = require('AnimationExperimental');
 var SeriesLanding = require('./SeriesLanding');
+var Entries = require('./Entries');
+var VideoFeed = require('./VideoFeed');
 
 var {
 	View,
@@ -46,13 +48,24 @@ var styles = StyleSheet.create({
 	},
 	loader: {
 		height: 80, 
-		color: 'red'
+		color: 'black'
 	},
 	image: {
 		width: 130, 
 		height: 84, 
 		alignSelf: 'center',
 		marginBottom: 40
+	},
+	backgroundImage: {
+		position: 'absolute', 
+		top: 0, 
+		left: 0, 
+		right: 0, 
+		bottom: 0,
+		width: 800,
+		height: 800,
+		flex: 1,
+		resizeMode: 'cover'
 	}
 })
 
@@ -62,14 +75,18 @@ class Main extends React.Component{
 		this.state = {
 			loaded: false,
 			showDescription: false,
-			seriesList: ['Style-Out-There', 'Love-Stories', 'Easy-Living-Hacks', 'Hang-Time-Jenn-Im', 'Beauty-Tutorials', 'Astrologica'],
+			seriesList: ['Style-Out-There', 'Easy-Living-Hacks', 'Beauty-Tutorials', 'A-Cut-Above', 'Best-Style-Tips'],
 			mapping: {
 				'Style Out There': 'Style-Out-There',
-				'Cupidity': 'Love-Stories',
-				'Astrologica': 'Astrologica',
-				'Hang Time with Jenn Im': 'Hang-Time-Jenn-Im',
+				//'Cupidity': 'Love-Stories',
+				//'Astrologica': 'Astrologica',
+				//'Hang Time with Jenn Im': 'Hang-Time-Jenn-Im',
 				'Hack Your Heart Out': 'Easy-Living-Hacks',
-				'Beauty Prep School': 'Beauty-Tutorials'
+				'Beauty Prep School': 'Beauty-Tutorials',
+				//'Trend Takeout': 'Trend-Takeout',
+				'A Cut Above': 'A-Cut-Above',
+				'Split Second Styling Tips': 'Best-Style-Tips'
+				//'Beauty Test Lab': 'Beauty-Test-Lab'
 			}
 		}
 		this.getModels() //TODO: make less gross
@@ -127,12 +144,30 @@ class Main extends React.Component{
 		})
 	}
 
+	handleViewVideoFeed(category){
+		api.getWellnessStories(category)
+			.then((res) => {
+				this.props.navigator.push({
+					component: VideoFeed,
+					title: 'Video Stories',
+					passProps: {
+						entries: res,
+						subcat: category
+					}
+				})
+			})
+			.catch((err) => { console.log('ERROR: ' + error); })
+	}
+
 	render(){
-		var goToSeries = (this.state.loaded) ? <TouchableHighlight onPress={this.handleEpisode.bind(this)} underlayColor="transparent"><Text style={styles.mainTitle}>GOTO: Video Series</Text></TouchableHighlight> : <View></View>;
+		var goToSeries = (this.state.loaded) ? <TouchableHighlight onPress={this.handleEpisode.bind(this)} underlayColor="transparent"><Text style={styles.mainTitle}>Browse Video Series</Text></TouchableHighlight> : <View></View>;
 		return(
 			<View style={styles.mainContainer}>
+				<Image style={styles.backgroundImage} source={{uri: 'http://www.clker.com/cliparts/0/5/9/1/1430368724442417087yellow%20orange%20peach%20pink%20blur%20wallpaper%20android%20background%20mixed%20combiantion%20plus%20radiant%20gradient.jpg'}} />
 				<Image style={styles.image} source={{uri: 'http://s2.r29static.com/blog/q91dog/assets/images/logos/big_logo.png'}}/>
+
 				{goToSeries}
+				
 				<ActivityIndicatorIOS
         animating={!this.state.loaded}
         style={styles.loader}
