@@ -46,6 +46,24 @@ var api = {
 		var category = category.toLowerCase();
 		var url = `http://api.refinery29.com/api/2/feeds/${category}`
 		return fetch(url).then((res) => res.json());
+	},
+
+	getAllSeriesContent(seriesList){
+		var list = seriesList,
+				urls = [],
+				seriesModel = {};
+
+		for(var i = 0; i < seriesList.length; i++){
+			var requestUrl = 'http://api.refinery29.com/api/2/feeds/' + list[i];
+			urls.push(requestUrl);
+		}
+
+		//return fetch(url).then((res) => res.json());
+		return urls;
+	},
+
+	getContent(url){
+		return fetch(url).then((res) => res.json());
 	}
 };
 

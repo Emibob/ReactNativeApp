@@ -23,20 +23,21 @@ var styles = StyleSheet.create({
 		marginTop: 20,
 		fontSize: 25,
 		textAlign: 'center',
-		color: '#000',
+		color: '#fff',
 		fontFamily: 'BrownStd-Regular',
 	},
 	titleContainer: {
 		flex: 1,
 		flexDirection: 'column',
 		justifyContent: 'center',
-		backgroundColor: '#fff'
+		backgroundColor: '#363380'
 	},
 	rowContainer: {
 		flexDirection: 'row',
 		flex: 1,
 		paddingTop: 10,
 		paddingBottom: 10,
+		backgroundColor: '#fff'
 	},
 	entryTitle: {
 		fontFamily: 'PlayFairDisplay-Bold',
@@ -48,7 +49,7 @@ var styles = StyleSheet.create({
 	entryDate: {
 		color: '#f75352',
 		fontSize: 12,
-		paddingBottom: 3,
+		paddingBottom: 2,
 		fontWeight: 'bold',
 		fontFamily: 'BrownStd-Regular',
 	},
@@ -126,7 +127,7 @@ class Entries extends React.Component{
 	openPage(url){
 		this.props.navigator.push({
 			component: Web_View,
-			title: 'Web View',
+			title: 'Refinery29',
 			passProps: {url}
 		});
 	}
@@ -159,6 +160,7 @@ class Entries extends React.Component{
 						</View>
 
 					</View>
+					<Separator />
 				</View>
 			)
 		}
@@ -178,13 +180,6 @@ class Entries extends React.Component{
 			<ScrollView style={styles.container}>
 				<View style={styles.titleContainer}>
 					<Text style={styles.title}>{helpers.formatTitle(this.props.subcat)}</Text>
-					<View style={styles.colorBarContainer}>
-						<View style={styles.colorBarBlack}></View>
-						<View style={styles.colorBarPink}></View>
-						<View style={styles.colorBarGreen}></View>
-						<View style={styles.colorBarBlue}></View>
-						<View style={styles.colorBarAqua}></View>
-					</View>
 				</View>
 				{list}
 
