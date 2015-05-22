@@ -95,7 +95,7 @@ class Main extends React.Component{
 	getModels(){
 		var list = this.state.seriesList,
 				urls = [],
-				seriesModels = [];
+				allSeriesModels = [];
 
 		for(var i = 0; i < list.length; i ++) {
 			var requestUrl = 'http://api.refinery29.com/api/2/feeds/' + list[i];
@@ -109,13 +109,13 @@ class Main extends React.Component{
 			api.getContent(urls[j].fullUrl)
 				.then((res) => {
 
-					seriesModels.push(res.result);
+					allSeriesModels.push(res.result);
 
 					this.setState({
-						seriesModels: seriesModels
+						allSeriesModels: allSeriesModels
 					})
 
-					if(seriesModels.length === list.length){
+					if(allSeriesModels.length === list.length){
 						this.setState({ loaded: true })
 					} else{
 						this.setState({ loaded: false })
@@ -126,20 +126,22 @@ class Main extends React.Component{
 
 	handleEpisode(seriesSlug){
 		var list = this.state.seriesList,
-				models = this.state.seriesModels.slice(),
-				firstAll = this.state.seriesModels[0],
-				first = this.state.mapping[this.state.seriesModels[0].feed_name],
-				remaining = this.state.seriesModels.splice(1,(this.state.seriesModels.length-1));
+				models = this.state.allSeriesModels.slice(),
+				firstAll = this.state.allSeriesModels[0],
+				first = this.state.mapping[this.state.allSeriesModels[0].feed_name],
+				remaining = this.state.allSeriesModels.splice(1,(this.state.allSeriesModels.length-1));
 
 		this.props.navigator.push({
 			component: SeriesLanding,
 			title: seriesSlug,
+			//leftButtonTitle: 'Custom Back FIRST',
 			passProps: {
 				seriesSlug: first, //next series slug, mapped
-				nextModel: firstAll, //entire model of first series
-				seriesList: remaining, //list of full series to follow
-				seriesModels: models, //shallow copy of all series models
-				mapping: this.state.mapping //array of models excluding the first
+				currentModel: firstAll, //entire model of first series
+				remainingSeriesModels: remaining, //list of full series to follow
+				allSeriesModels: models, //shallow copy of all series models
+				mapping: this.state.mapping, //array of models excluding the first
+				seriesIndex: 0
 			}
 		})
 	}
@@ -176,7 +178,5 @@ class Main extends React.Component{
 		)
 	}
 }
-
-StatusBarIOS.setHidden(true, StatusBarIOS.Animation.slide);
 
 module.exports = Main;

@@ -13,7 +13,8 @@ var {
 	StyleSheet,
 	TouchableHighlight,
 	Image,
-	StatusBarIOS
+	StatusBarIOS,
+	ScrollView
 } = React;
 
 var styles = StyleSheet.create({
@@ -49,23 +50,44 @@ var styles = StyleSheet.create({
 		alignItems: 'center'
 	},
 	borderBox: {
-		height: 570, 
+		height: 600, 
 		width: 330, 
 		borderWidth: 2, 
 		borderColor: '#fff', 
 		alignSelf: 'center',
-		marginTop: 30
+		marginTop: 10
+	},
+	customNav: {
+		flexDirection: 'row',
+		marginTop: 10,
+		alignItems: 'center',
+		padding: 0,
+		height: 50,
 	},
 	nextSeries: {
 		color: 'white',
 		fontFamily: 'BrownStd-Regular', 
 		fontSize: 20,
 		textAlign: 'right',
-		marginTop: 10,
-		marginRight: 10
+		flexDirection: 'row',
+		flex: 1,
+		alignSelf:'stretch',
+		width: 160,
+		paddingRight: 15
+	},
+	previousSeries: {
+		color: 'white',
+		fontFamily: 'BrownStd-Regular', 
+		fontSize: 20,
+		textAlign: 'left',
+		flexDirection: 'row',
+		flex: 1,
+		alignSelf:'stretch',
+		width: 160,
+		paddingLeft: 15
 	},
 	seriesTitle: {
-		marginTop: 200, 
+		marginTop: 160, 
 		color: 'white', 
 		fontFamily: 'BrownStd-Regular', 
 		fontSize: 25, 
@@ -90,7 +112,7 @@ var styles = StyleSheet.create({
 		textAlign: 'left',
 		paddingLeft: 20,
 		paddingRight: 20,
-		marginTop: 130,
+		marginTop: 120,
 		bottom: 0,
 		lineHeight: 24
 	},
@@ -99,7 +121,7 @@ var styles = StyleSheet.create({
 		fontSize: 40, 
 		alignSelf: 'center', 
 		textAlign: 'center', 
-		marginTop: 130
+		marginTop: 120
 	},
 	separator: {
 		height: 1,
@@ -114,13 +136,13 @@ class SeriesLanding extends React.Component{
 	constructor(props){
 		super(props)
 		this.state = {
-			currentSeries: this.props.seriesSlug,
-			seriesList: this.props.seriesList, //remaining models
+			currentSeriesSlug: this.props.seriesSlug, //Used to hit API for Entries
+			allSeriesModels: this.props.allSeriesModels, //Array of ALL series model objects {card_ids, feed_name, full_cards}
+			currentModel: this.props.currentModel, //Current series model object
+			mapping: this.props.mapping,
+			ooyalaVideoUrl: 'http://cf.c.ooyala.com/' + this.props.currentModel.full_cards[1].ooyala_video + '/DOcJ-FxaFrRg4gtDEwOjIwbTowODE7WK',
 			showDescription: false,
-			seriesModels: this.props.seriesModels, //array of objs
-			nextModel: this.props.nextModel, //the CURRENT, chosen model
-			ooyalaVideoUrl: 'http://cf.c.ooyala.com/' + this.props.nextModel.full_cards[1].ooyala_video + '/DOcJ-FxaFrRg4gtDEwOjIwbTowODE7WK',
-			mapping: this.props.mapping
+			seriesIndex: this.props.seriesIndex + 1
 		}
 	}
 
@@ -140,12 +162,12 @@ class SeriesLanding extends React.Component{
 	}
 	
 	componentWillMount(){
-		var firstCard = this.state.nextModel.full_cards[1],
-				secondCard = this.state.nextModel.full_cards[2],
+		var firstCard = this.state.currentModel.full_cards[1],
+				secondCard = this.state.currentModel.full_cards[2],
 				description = (firstCard.excerpt) ? firstCard.excerpt : secondCard.excerpt,
 				title = (firstCard.meta.title) ? firstCard.meta.title : secondCard.meta.title,
 				fallbackImage = (firstCard.main_image) ? firstCard.main_image.src : secondCard.main_image.src,
-				entriesList = this.state.nextModel.full_cards;
+				entriesList = this.state.currentModel.full_cards;
 
 
 		this.setState({
@@ -154,10 +176,6 @@ class SeriesLanding extends React.Component{
 			seriesListOfEntires: entriesList,
 			fallbackImage: fallbackImage
 		})
-	}
-
-	componentDidMount(){
-		console.log('componentDidMount');
 	}
 
 	handlePressPlus(){
@@ -169,7 +187,8 @@ class SeriesLanding extends React.Component{
 	}
 
 	handleEpisode(){
-		console.log('handle episode to web view');
+		//TODO: Handle back to Entries
+
 		var url = this.state.seriesListOfEntires[1].canonical; //hardcode first episode for now
 
 		this.props.navigator.push({
@@ -179,48 +198,60 @@ class SeriesLanding extends React.Component{
 		})
 	}
 
+	handleLeftButtonPress(){
+		console.log('handleLeftButtonPres');
+	}
+
+	handleRightButtonPress(){
+		console.log('handleRightButtonPres');
+	}
+
 	handleNextSeries(seriesSlug){
-		if(this.state.seriesList[0]){
-		var list = this.state.seriesList,
-				firstAll = this.state.seriesList[0],
-				first = this.state.mapping[this.state.seriesList[0].feed_name],
-				remaining = this.state.seriesList.splice(1,(this.state.seriesList.length-1));
-				console.log(this.state);
 
-
+		if(this.state.seriesIndex < this.state.allSeriesModels.length){
 			this.props.navigator.push({
 				component: SeriesLanding,
 				title: seriesSlug,
+				//backButtonTitle: 'string',
+				//rightButtonTitle: 'string',
+				//onRightButtonPress: this.handleRightButtonPress,
+				//onLeftButtonPress: this.handleLeftButtonPress,
 				passProps: {
-					seriesSlug: first, //next series slug, mapped
-					nextModel: firstAll, //entire model of first series
-					seriesList: remaining, //list of full series to follow
-					seriesModels: this.props.seriesModels, //shallow copy of all series models
-					mapping: this.state.mapping //array of models excluding the first
+					seriesSlug: seriesSlug, //next series slug, mapped
+					currentModel: this.state.allSeriesModels[(this.state.seriesIndex)], //entire model of first remaining series
+					allSeriesModels: this.props.allSeriesModels, //shallow copy of all series models
+					mapping: this.state.mapping, //array of models excluding the first
+					seriesIndex: this.state.seriesIndex
 				}
 			})
 		} else {
+			//TODO: remove next button 
 			console.log('end of series');
 		}
 	}
 
+	handlePreviousSeries(seriesSlug){
+
+		//TODO: Handle back to homepage
+
+			this.props.navigator.pop({
+				component: SeriesLanding,
+				title: seriesSlug,
+				passProps: {
+					seriesSlug: seriesSlug, //next series slug, mapped
+					currentModel: this.state.allSeriesModels[(this.state.seriesIndex - 1)], //entire model of first remaining series
+					allSeriesModels: this.props.allSeriesModels, //shallow copy of all series models
+					mapping: this.state.mapping, //array of models excluding the first
+					seriesIndex: (this.state.seriesIndex - 1)
+				}
+			})
+	}
+
 	render(){
 		var seriesDescription = (this.state.showDescription) ? <Text style={styles.seriesDescription} numberOfLines={3}>{this.state.seriesDescription}</Text> : <Text style={styles.expand}>+</Text>;
-		// var videoUrls = {
-		// 	'Style-Out-There': 'http://cf.c.ooyala.com/1qeHV0cTq-oNW3ZdUiLhjve7OPoZwOF1/DOcJ-FxaFrRg4gtDEwOjIwbTowODE7WK?_=lmu7ng919k9',
-		// 	'Trans-America': 'http://cf.c.ooyala.com/0ybXJxczrx_JANV3q0a5AQykYyBUSxj0/DOcJ-FxaFrRg4gtDEwOnI5OjBrO-sXix?_=1a9yfz5b3xr',
-		// 	'Astrologica': 'http://cf.c.ooyala.com/Zrdmgybjo80V3YUMZtCTUF902GqwnHP8/DOcJ-FxaFrRg4gtDEwOmk2OjBrO6qGv_?_=ijul0izfr',
-		// 	'Love-Stories': 'http://cf.c.ooyala.com/lkdXE0czoxKYvf_2Y9c5QP6j_sIBpl9v/DOcJ-FxaFrRg4gtDMwOnI5OjBrO_k5ap?_=xv12afywrk9',
-		// 	'Easy-Living-Hacks': 'http://cf.c.ooyala.com/J0YmdndDpoJK1TCXvtUVIJMdleXAdzsh/DOcJ-FxaFrRg4gtDEwOnI5OjBrO-sXix?_=ncj2mjnstt9',
-		// 	'Gimme-Five-Healthy-Recipe-Videos' : 'http://cf.c.ooyala.com/VrcTdsdDqH5rTwYdAJyc3hGC2p85JI_F/DOcJ-FxaFrRg4gtDEwOjIwbTowODE7WK?_=3cmhx5hfr',
-		// 	'Hang-Time-Jenn-Im' : 'http://cf.c.ooyala.com/pxdGVtcDp_zjrWnl9-aoZvSviQ9NPtf-/DOcJ-FxaFrRg4gtDMwOmk2OjBrO2m1sK?_=ajgb2249529',
-		// 	'Beauty-Tutorials' : 'http://cf.c.ooyala.com/Y3OTFsdDoJDT1EhQUylrGA1Uqiandp4b/DOcJ-FxaFrRg4gtDEwOjIwbTowODE7WK?_=uz9676nu3di'
-		// };
-		//TODO: Fix backupBackgroundImage so it's not flashing before a video
 		return(
-
 			<View style={styles.mainContainer}>
-			<Image style={styles.imageFallback} source={{uri: 'http:' + this.state.fallbackImage}} />
+
 			<Video source={{uri: this.state.ooyalaVideoUrl}}
 				rate={1.0}
 				muted={true}
@@ -230,18 +261,25 @@ class SeriesLanding extends React.Component{
 				
 				<View style={styles.colorFilter}>
 					<View style={styles.borderBox}>
-						<TouchableHighlight onPress={this.handleNextSeries.bind(this, this.state.mapping[this.state.seriesList[0]])} underlayColor="transparent">
-							<Text style={styles.nextSeries}>Next Series</Text>
-						</TouchableHighlight>
-						<TouchableHighlight onPress={this.handleCategory.bind(this, this.state.currentSeries)} underlayColor="transparent">
-							<Text style={styles.seriesTitle}>{this.state.nextModel.feed_name}</Text>
+
+						<View style={styles.customNav}>
+							<TouchableHighlight onPress={this.handlePreviousSeries.bind(this, this.state.mapping[this.state.allSeriesModels[this.state.seriesIndex].feed_name])} underlayColor="transparent">
+								<Text style={styles.previousSeries}>Back</Text>
+							</TouchableHighlight>
+							<TouchableHighlight onPress={this.handleNextSeries.bind(this, this.state.mapping[this.state.allSeriesModels[(this.state.seriesIndex)].feed_name])} underlayColor="transparent">
+								<Text style={styles.nextSeries}>Next</Text>
+							</TouchableHighlight>
+						</View>
+						
+						<TouchableHighlight onPress={this.handleCategory.bind(this, this.state.currentSeriesSlug)} underlayColor="transparent">
+							<Text style={styles.seriesTitle}>{this.state.currentModel.feed_name}</Text>
 						</TouchableHighlight>
 						<View style={styles.separator} />
 						<TouchableHighlight onPress={this.handleEpisode.bind(this)} underlayColor="transparent">
 							<Text style={styles.episode} numberOfLines={2}>WATCH: {this.state.seriesEpisode}</Text>
 						</TouchableHighlight>
 						<TouchableHighlight onPress={this.handleEpisode.bind(this)} underlayColor="transparent">
-							<Image style={{width: 17, height: 17, alignSelf: 'center', resizeMode: 'stretch', marginTop: 9}} source={{uri: 'http://upload.wikimedia.org/wikipedia/commons/0/03/White_arrow_square.png'}} />
+							<Image style={{width: 60, height: 60, alignSelf: 'center', resizeMode: 'stretch', marginTop: 0}} source={{uri: 'http://www.nrafamilyinsights.org/images/button_play.png'}} />
 						</TouchableHighlight>
 						<TouchableHighlight onPress={this.handlePressPlus.bind(this)} underlayColor="transparent">
 							{seriesDescription}
@@ -255,10 +293,10 @@ class SeriesLanding extends React.Component{
 };
 
 SeriesLanding.propTypes = {
-	seriesSlug: React.PropTypes.string.isRequired, //next series slug, mapped
-	nextModel: React.PropTypes.object.isRequired, //entire model of first series
-	seriesList: React.PropTypes.array.isRequired, //list of full info series to follow
-	mapping: React.PropTypes.object.isRequired //array of models excluding the first
+	seriesSlug: React.PropTypes.string.isRequired,
+	currentModel: React.PropTypes.object.isRequired,
+	mapping: React.PropTypes.object.isRequired,
+	seriesIndex: React.PropTypes.number.isRequired
 }
 
 module.exports = SeriesLanding;

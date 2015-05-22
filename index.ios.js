@@ -19,7 +19,7 @@ var {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111',
+    backgroundColor: '#fff'
   }
 });
 
@@ -28,6 +28,7 @@ class Emily extends React.Component{
     return (
       <NavigatorIOS
         style={styles.container}
+        navigationBarHidden={true}
         initialRoute={{
           title: 'Home',
           component: Main
