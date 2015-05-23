@@ -139,7 +139,7 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#363380',
+    backgroundColor: '#fff',
   },
   slide2: {
     flex: 1,
@@ -284,16 +284,18 @@ class SeriesLanding extends React.Component{
 		var buildVideos = this.state.currentModel.full_cards.map((item, index) => {
 			if(item.type === 'VIDEO'){
 			return(
-					<View style={{flex: 1, flexDirection: 'row', marginTop: 20}} key={index}>
-						<Image style={{flex: 1, width: 80, height: 80, resizeMode: 'stretch', flexDirection: 'row', borderRadius: 40, paddingLeft:20}} source={{uri: 'http:' + item.main_image.src}} />
-					
-					
-						<View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', width: 280, paddingLeft: 10, paddingRight:10}}>
+					<View style={{flex: 1, flexDirection: 'row', paddingTop: 15, paddingBottom: 15, borderWidth:1, borderColor: '#fff', borderBottomColor:'#ccc'}} key={index}>
 						
-									<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontSize: 16, fontFamily: 'BrownStd-Regular', marginBottom: 5, color: 'white'}} numberOfLines={2}>{helpers.formatText(item.title)}</Text>
-									<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontFamily: 'BrownStd-Regular', fontSize: 12, marginBottom: 10, color: 'white'}}>{item.published_formatted}</Text>
-									<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontFamily: 'BrownStd-Regular', fontSize: 12, color: 'white'}} numberOfLines={2}>{helpers.formatText(item.meta.description)}</Text>
-									<View style={{height:1, backgroundColor:'white', width: 500, flexDirection: 'column', flexWrap: 'wrap',}}/>
+						<Image style={{flex: 1, width: 90, height: 90, resizeMode: 'stretch', flexDirection: 'row', borderRadius: 45, marginLeft: 20}} source={{uri: 'http:' + item.main_image.src}} />
+
+						
+
+						
+					
+						<View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', width: 280, paddingLeft: 10, paddingRight:30}}>
+						
+									<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontSize: 16, fontFamily: 'BrownStd-Regular', marginBottom: 7, color: '#363380', fontWeight: 'bold'}} numberOfLines={2}>{helpers.formatText(item.title)}</Text>
+									<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontFamily: 'BrownStd-Regular', fontSize: 12, color: 'black', lineHeight: 16}} numberOfLines={2}>{helpers.formatText(item.meta.description)}</Text>
 						</View>
 
 					</View>
@@ -306,6 +308,9 @@ class SeriesLanding extends React.Component{
 	}
 
 	render(){
+		var dots = <View style={{backgroundColor:'transparent', width: 5, height: 5,borderRadius: 3, borderWidth:1, borderColor: '#A56CEB', marginLeft: 15, marginRight: 0, marginTop: 3, marginBottom: 3,}} />;
+		var activeDots = <View style={{backgroundColor:'#A56CEB', width: 6, height: 6,borderRadius: 3, marginLeft: 15, marginRight: 0, marginTop: 3, marginBottom: 3,}} />;
+		
 		var list = (this.state.currentModel.full_cards) ? this.buildListOfVideos() : <Text>Oops, no videos here</Text>
 		var seriesDescription = (this.state.showDescription) ? <Text style={styles.seriesDescription} numberOfLines={3}>{this.state.seriesDescription}</Text> : <Text style={styles.expand}>+</Text>;
 		return(
@@ -314,6 +319,9 @@ class SeriesLanding extends React.Component{
 				horizontal={false}  
 				showsButtons={false}
 				showsVerticalScrollIndicator={true}
+				dot={dots}
+				activeDot={activeDots}
+				paginationStyle={{height: 122, width: 15}}
 				>
 
 
@@ -356,6 +364,7 @@ class SeriesLanding extends React.Component{
 
 
 				<View style={styles.slide1}>
+					<View style={{height: 30}}></View>
           {list}
         </View>
         <View style={styles.slide2}>
