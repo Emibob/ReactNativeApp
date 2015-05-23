@@ -6,6 +6,8 @@ var helpers = require('../Utils/helpers');
 var Video = require('react-native-video');
 var AnimationExperimental = require('AnimationExperimental');
 var Web_View = require('./Helpers/WebView');
+var VideoFeed = require('./VideoFeed');
+var Swiper = require('react-native-swiper');
 
 var {
 	View,
@@ -129,6 +131,33 @@ var styles = StyleSheet.create({
 		width: 260,
 		alignSelf: 'center',
 		marginTop: 10
+	},
+	wrapper: {
+
+	},
+	slide1: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#363380',
+  },
+  slide2: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#97CAE5',
+  },
+  slide3: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#92BBD9',
+  },
+  separatorTwo: {
+		height: 1,
+		backgroundColor: '#363380',
+		width: 100,
+		flex: 1
 	}
 });
 
@@ -208,7 +237,11 @@ class SeriesLanding extends React.Component{
 
 	handleNextSeries(seriesSlug){
 
-		if(this.state.seriesIndex < this.state.allSeriesModels.length){
+		//TODO: Bug - skipping over 1 series
+		console.log('this.state.seriesIndex', this.state.seriesIndex);
+		console.log('this.state.allSeriesModels.length', (this.state.allSeriesModels.length - 1));
+
+		if(this.state.seriesIndex < (this.state.allSeriesModels.length - 1)){
 			this.props.navigator.push({
 				component: SeriesLanding,
 				title: seriesSlug,
@@ -247,11 +280,44 @@ class SeriesLanding extends React.Component{
 			})
 	}
 
+	buildListOfVideos(){
+		var buildVideos = this.state.currentModel.full_cards.map((item, index) => {
+			if(item.type === 'VIDEO'){
+			return(
+					<View style={{flex: 1, flexDirection: 'row', marginTop: 20}} key={index}>
+						<Image style={{flex: 1, width: 80, height: 80, resizeMode: 'stretch', flexDirection: 'row', borderRadius: 40, paddingLeft:20}} source={{uri: 'http:' + item.main_image.src}} />
+					
+					
+						<View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', width: 280, paddingLeft: 10, paddingRight:10}}>
+						
+									<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontSize: 16, fontFamily: 'BrownStd-Regular', marginBottom: 5, color: 'white'}} numberOfLines={2}>{helpers.formatText(item.title)}</Text>
+									<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontFamily: 'BrownStd-Regular', fontSize: 12, marginBottom: 10, color: 'white'}}>{item.published_formatted}</Text>
+									<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontFamily: 'BrownStd-Regular', fontSize: 12, color: 'white'}} numberOfLines={2}>{helpers.formatText(item.meta.description)}</Text>
+									<View style={{height:1, backgroundColor:'white', width: 500, flexDirection: 'column', flexWrap: 'wrap',}}/>
+						</View>
+
+					</View>
+
+
+			)
+			}
+		})
+		return buildVideos;
+	}
+
 	render(){
+		var list = (this.state.currentModel.full_cards) ? this.buildListOfVideos() : <Text>Oops, no videos here</Text>
 		var seriesDescription = (this.state.showDescription) ? <Text style={styles.seriesDescription} numberOfLines={3}>{this.state.seriesDescription}</Text> : <Text style={styles.expand}>+</Text>;
 		return(
-			<View style={styles.mainContainer}>
 
+			<Swiper style={styles.wrapper} 
+				horizontal={false}  
+				showsButtons={false}
+				showsVerticalScrollIndicator={true}
+				>
+
+
+			<View style={styles.mainContainer}>
 			<Video source={{uri: this.state.ooyalaVideoUrl}}
 				rate={1.0}
 				muted={true}
@@ -286,8 +352,23 @@ class SeriesLanding extends React.Component{
 						</TouchableHighlight>
 					</View>
 				</View>
-
 			</View>
+
+
+				<View style={styles.slide1}>
+          {list}
+        </View>
+        <View style={styles.slide2}>
+          <Text style={styles.text}>Beautiful</Text>
+        </View>
+        <View style={styles.slide3}>
+          <Text style={styles.text}>And simple</Text>
+        </View>
+
+
+			</Swiper>
+			
+
 		)
 	}
 };

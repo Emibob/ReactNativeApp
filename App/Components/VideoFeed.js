@@ -16,7 +16,8 @@ var {
 
 var styles = StyleSheet.create({
 	container: {
-		flex: 1
+		flex: 1,
+		height: 400
 	},
 	title: {
 		marginBottom: 20,
@@ -32,11 +33,24 @@ class VideoFeed extends React.Component{
 	constructor(props){
 		super(props)
 		this.state = {
-			currentStories: '',
-			numTimesLoaded: 0,
-			moreEntries: this.props.entries.result.card_ids,
+			seriesModel: this.props.seriesModel, 
+			seriesInitialCards: this.props.seriesModel.full_cards
+			//this.props.seriesModel.card_ids only sometimes...
 		}
+		// if(this.state.entryIds){
+		// 	this.buildMoreStories()
+		// }
 	}
+
+	buildMoreStories(){
+		api.getMoreStories(this.state.entryIds)
+			.then((res) => {
+				this.setState({
+					moreStories: res
+				})
+			})
+	}
+
 	openPage(url){
 		this.props.navigator.push({
 			component: Web_View,
@@ -45,16 +59,17 @@ class VideoFeed extends React.Component{
 		});
 	}
 	render(){
+		var moreStories = (this.state.moreStories) ? <Text>Stories Are Here</Text> : <Text>No Stories</Text>;
 		return(
-			<ScrollView style={styles.container}>
-				<Text>Poop</Text>
-			</ScrollView>
+			<View style={styles.container}>
+				{moreStories}
+			</View>
 		)
 	}
 };
 
 VideoFeed.propTypes = {
-	entries: React.PropTypes.object.isRequired
+	entryIds: React.PropTypes.array.isRequired
 }
 
 module.exports = VideoFeed;

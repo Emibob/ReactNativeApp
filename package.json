@@ -8,6 +8,7 @@
   "dependencies": {
     "react-native": "~0.4.1",
     "react-native-refreshable-listview": "~1.2.0",
-    "react-native-video": "~0.4.0"
+    "react-native-video": "~0.4.0",
+    "react-native-swiper": "~1.3.0"
   }
 }

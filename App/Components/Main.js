@@ -8,6 +8,7 @@ var AnimationExperimental = require('AnimationExperimental');
 var SeriesLanding = require('./SeriesLanding');
 var Entries = require('./Entries');
 var VideoFeed = require('./VideoFeed');
+var Swiper = require('react-native-swiper');
 
 var {
 	View,
@@ -47,8 +48,7 @@ var styles = StyleSheet.create({
 		textAlign: 'center'
 	},
 	loader: {
-		height: 80, 
-		color: 'black'
+		height: 80
 	},
 	image: {
 		width: 130, 
@@ -66,7 +66,32 @@ var styles = StyleSheet.create({
 		height: 800,
 		flex: 1,
 		resizeMode: 'cover'
-	}
+	},
+	wrapper: {
+  },
+  slide1: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#9DD6EB',
+  },
+  slide2: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#97CAE5',
+  },
+  slide3: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#92BBD9',
+  },
+  text: {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: 'bold',
+  }
 })
 
 class Main extends React.Component{
@@ -146,21 +171,6 @@ class Main extends React.Component{
 		})
 	}
 
-	handleViewVideoFeed(category){
-		api.getWellnessStories(category)
-			.then((res) => {
-				this.props.navigator.push({
-					component: VideoFeed,
-					title: 'Video Stories',
-					passProps: {
-						entries: res,
-						subcat: category
-					}
-				})
-			})
-			.catch((err) => { console.log('ERROR: ' + error); })
-	}
-
 	render(){
 		var goToSeries = (this.state.loaded) ? <TouchableHighlight onPress={this.handleEpisode.bind(this)} underlayColor="transparent"><Text style={styles.mainTitle}>Browse Video Series</Text></TouchableHighlight> : <View></View>;
 		return(
@@ -173,7 +183,11 @@ class Main extends React.Component{
 				<ActivityIndicatorIOS
         animating={!this.state.loaded}
         style={styles.loader}
-        size="large"/>
+        color={'white'}
+        size='large'/>
+
+        
+
 			</View>
 		)
 	}
