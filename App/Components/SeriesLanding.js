@@ -1,12 +1,7 @@
 var React = require('react-native');
-var api = require('../Utils/api');
-var Dashboard = require('./Dashboard');
-var Entries = require('./Entries');
 var helpers = require('../Utils/helpers');
 var Video = require('react-native-video');
-var AnimationExperimental = require('AnimationExperimental');
 var Web_View = require('./Helpers/WebView');
-var VideoFeed = require('./VideoFeed');
 var Swiper = require('react-native-swiper');
 
 var {
@@ -15,8 +10,7 @@ var {
 	StyleSheet,
 	TouchableHighlight,
 	Image,
-	StatusBarIOS,
-	ScrollView
+	StatusBarIOS
 } = React;
 
 var styles = StyleSheet.create({
@@ -33,17 +27,17 @@ var styles = StyleSheet.create({
 		right: 0, 
 		bottom: 0
 	},
-	imageFallback:{
-		position: 'absolute', 
-		top: 0, 
-		left: 0, 
-		right: 0, 
-		bottom: 0,
-		width: 800,
-		height: 800,
-		flex: 1,
-		resizeMode: 'cover'
-	},
+	// imageFallback:{
+	// 	position: 'absolute', 
+	// 	top: 0, 
+	// 	left: 0, 
+	// 	right: 0, 
+	// 	bottom: 0,
+	// 	width: 800,
+	// 	height: 800,
+	// 	flex: 1,
+	// 	resizeMode: 'cover'
+	// },
 	colorFilter: {
 		backgroundColor: '#363380', 
 		opacity: 0.8, 
@@ -98,23 +92,14 @@ var styles = StyleSheet.create({
 		paddingLeft: 20,
 		paddingRight: 20
 	},
-	episode:{
-		color: 'white', 
-		fontSize: 15, 
-		alignSelf: 'center', 
-		textAlign: 'center',
-		marginTop: 10,
-		paddingLeft: 20,
-		paddingRight: 20
-	},
 	seriesDescription: {
 		color: 'white', 
 		fontSize: 14, 
 		alignSelf: 'center', 
-		textAlign: 'left',
+		textAlign: 'center',
 		paddingLeft: 20,
 		paddingRight: 20,
-		marginTop: 120,
+		marginTop: 10,
 		bottom: 0,
 		lineHeight: 24
 	},
@@ -123,7 +108,7 @@ var styles = StyleSheet.create({
 		fontSize: 40, 
 		alignSelf: 'center', 
 		textAlign: 'center', 
-		marginTop: 120
+		marginTop: 10
 	},
 	separator: {
 		height: 1,
@@ -131,6 +116,12 @@ var styles = StyleSheet.create({
 		width: 260,
 		alignSelf: 'center',
 		marginTop: 10
+	},
+	swipeDownArrow: {
+		width: 26, 
+		height: 17,
+		alignSelf: 'center',
+		marginTop: 240
 	},
 	wrapper: {
 
@@ -152,14 +143,17 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#92BBD9',
-  },
-  separatorTwo: {
-		height: 1,
-		backgroundColor: '#363380',
-		width: 100,
-		flex: 1
-	}
+  }
 });
+
+var videoUrls = {
+	'Style-Out-There': 'http://cf.c.ooyala.com/1qeHV0cTq-oNW3ZdUiLhjve7OPoZwOF1/DOcJ-FxaFrRg4gtDEwOnI5OjBrO-sXix?_=9ictmqs38fr',
+	'A-Cut-Above': 'http://cf.c.ooyala.com/UwZG83cjo35S9lWXlwhbXxAiI3TpBl4Z/DOcJ-FxaFrRg4gtDEwOnI5OjBrO-sXix?_=fsxhmdholxr',
+	'Easy-Living-Hacks': 'http://cf.c.ooyala.com/J0YmdndDpoJK1TCXvtUVIJMdleXAdzsh/DOcJ-FxaFrRg4gtDEwOnI5OjBrO-sXix?_=bmj8l0daemi',
+	'Beauty-Tutorials': 'http://cf.c.ooyala.com/kxMjhydDpdCMBLw1R2KYkxUjlQxknKm_/DOcJ-FxaFrRg4gtDEwOnI5OjBrO-sXix?_=2kdj10pb9',
+	'Best-Style-Tips': 'http://cf.c.ooyala.com/80d2pnczrKnQE-Qj0yayZFdXGRcsbG6q/DOcJ-FxaFrRg4gtDEwOnI5OjBrO-sXix?_=k6yymu6jemi',
+	'Hang-Time-Jenn-Im': 'http://cf.c.ooyala.com/pxdGVtcDp_zjrWnl9-aoZvSviQ9NPtf-/DOcJ-FxaFrRg4gtDMwOmk2OjBrO2m1sK?_=67zvf6wp14i'
+}
 
 class SeriesLanding extends React.Component{
 	constructor(props){
@@ -169,41 +163,21 @@ class SeriesLanding extends React.Component{
 			allSeriesModels: this.props.allSeriesModels, //Array of ALL series model objects {card_ids, feed_name, full_cards}
 			currentModel: this.props.currentModel, //Current series model object
 			mapping: this.props.mapping,
-			ooyalaVideoUrl: 'http://cf.c.ooyala.com/' + this.props.currentModel.full_cards[1].ooyala_video + '/DOcJ-FxaFrRg4gtDEwOjIwbTowODE7WK',
+			ooyalaVideoUrl: videoUrls[this.props.seriesSlug], //'http://cf.c.ooyala.com/' + this.props.currentModel.full_cards[1].ooyala_video + '/DOcJ-FxaFrRg4gtDEwOjIwbTowODE7WK',
 			showDescription: false,
 			seriesIndex: this.props.seriesIndex + 1
 		}
 	}
 
-	handleCategory(category){
-		api.getWellnessStories(category)
-			.then((res) => {
-				this.props.navigator.push({
-					component: Entries,
-					title: 'Refinery29',
-					passProps: {
-						entries: res,
-						subcat: category
-					}
-				})
-			})
-			.catch((err) => { console.log('ERROR: ' + error); })
-	}
-	
 	componentWillMount(){
 		var firstCard = this.state.currentModel.full_cards[1],
-				secondCard = this.state.currentModel.full_cards[2],
-				description = (firstCard.excerpt) ? firstCard.excerpt : secondCard.excerpt,
-				title = (firstCard.meta.title) ? firstCard.meta.title : secondCard.meta.title,
-				fallbackImage = (firstCard.main_image) ? firstCard.main_image.src : secondCard.main_image.src,
-				entriesList = this.state.currentModel.full_cards;
-
+				secondCard = this.state.currentModel.full_cards[2];
 
 		this.setState({
-			seriesDescription: description,
-			seriesEpisode: title,
-			seriesListOfEntires: entriesList,
-			fallbackImage: fallbackImage
+			seriesDescription: (this.state.currentModel.full_cards[0].excerpt) ? this.state.currentModel.full_cards[0].excerpt : this.state.currentModel.full_cards[0].meta.description,
+			seriesEpisode: (firstCard.meta.title) ? firstCard.meta.title : secondCard.meta.title,
+			seriesListOfEntires: this.state.currentModel.full_cards,
+			fallbackImage: (firstCard.main_image) ? firstCard.main_image.src : secondCard.main_image.src
 		})
 	}
 
@@ -215,28 +189,15 @@ class SeriesLanding extends React.Component{
 		}
 	}
 
-	handleEpisode(){
-		//TODO: Handle back to Entries
-
-		var url = this.state.seriesListOfEntires[1].canonical; //hardcode first episode for now
-
+	openPage(url){
 		this.props.navigator.push({
 			component: Web_View,
 			title: 'Refinery29',
 			passProps: {url}
-		})
-	}
-
-	handleLeftButtonPress(){
-		console.log('handleLeftButtonPres');
-	}
-
-	handleRightButtonPress(){
-		console.log('handleRightButtonPres');
+		});
 	}
 
 	handleNextSeries(seriesSlug){
-
 		//TODO: Bug - skipping over 1 series
 		console.log('this.state.seriesIndex', this.state.seriesIndex);
 		console.log('this.state.allSeriesModels.length', (this.state.allSeriesModels.length - 1));
@@ -245,8 +206,6 @@ class SeriesLanding extends React.Component{
 			this.props.navigator.push({
 				component: SeriesLanding,
 				title: seriesSlug,
-				//backButtonTitle: 'string',
-				//rightButtonTitle: 'string',
 				//onRightButtonPress: this.handleRightButtonPress,
 				//onLeftButtonPress: this.handleLeftButtonPress,
 				passProps: {
@@ -264,9 +223,7 @@ class SeriesLanding extends React.Component{
 	}
 
 	handlePreviousSeries(seriesSlug){
-
 		//TODO: Handle back to homepage
-
 			this.props.navigator.pop({
 				component: SeriesLanding,
 				title: seriesSlug,
@@ -283,25 +240,17 @@ class SeriesLanding extends React.Component{
 	buildListOfVideos(){
 		var buildVideos = this.state.currentModel.full_cards.map((item, index) => {
 			if(item.type === 'VIDEO'){
-			return(
-					<View style={{flex: 1, flexDirection: 'row', paddingTop: 15, paddingBottom: 15, borderWidth:1, borderColor: '#fff', borderBottomColor:'#ccc'}} key={index}>
-						
+				return(
+					<TouchableHighlight onPress={this.openPage.bind(this, item.canonical)} underlayColor="transparent" key={index}>
+					<View style={{flex: 1, flexDirection: 'row', paddingTop: 15, paddingBottom: 15, borderWidth:1, borderColor: '#fff', borderBottomColor:'#ccc'}}>
 						<Image style={{flex: 1, width: 90, height: 90, resizeMode: 'stretch', flexDirection: 'row', borderRadius: 45, marginLeft: 20}} source={{uri: 'http:' + item.main_image.src}} />
-
-						
-
-						
-					
 						<View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', width: 280, paddingLeft: 10, paddingRight:30}}>
-						
-									<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontSize: 16, fontFamily: 'BrownStd-Regular', marginBottom: 7, color: '#363380', fontWeight: 'bold'}} numberOfLines={2}>{helpers.formatText(item.title)}</Text>
-									<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontFamily: 'BrownStd-Regular', fontSize: 12, color: 'black', lineHeight: 16}} numberOfLines={2}>{helpers.formatText(item.meta.description)}</Text>
+							<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontSize: 16, fontFamily: 'BrownStd-Regular', marginBottom: 7, color: '#363380', fontWeight: 'bold'}} numberOfLines={2}>{helpers.formatText(item.title)}</Text>
+							<Text style={{flexDirection: 'column', flexWrap: 'wrap', fontFamily: 'BrownStd-Regular', fontSize: 12, color: 'black', lineHeight: 16}} numberOfLines={2}>{helpers.formatText(item.meta.description)}</Text>
 						</View>
-
 					</View>
-
-
-			)
+					</TouchableHighlight>
+				)
 			}
 		})
 		return buildVideos;
@@ -312,7 +261,7 @@ class SeriesLanding extends React.Component{
 		var activeDots = <View style={{backgroundColor:'#A56CEB', width: 6, height: 6,borderRadius: 3, marginLeft: 15, marginRight: 0, marginTop: 3, marginBottom: 3,}} />;
 		
 		var list = (this.state.currentModel.full_cards) ? this.buildListOfVideos() : <Text>Oops, no videos here</Text>
-		var seriesDescription = (this.state.showDescription) ? <Text style={styles.seriesDescription} numberOfLines={3}>{this.state.seriesDescription}</Text> : <Text style={styles.expand}>+</Text>;
+		var seriesDescription = (this.state.showDescription) ? <Text style={styles.seriesDescription} numberOfLines={2}>{helpers.formatText(this.state.seriesDescription)}</Text> : <Text style={styles.expand}>+</Text>;
 		return(
 
 			<Swiper style={styles.wrapper} 
@@ -345,19 +294,16 @@ class SeriesLanding extends React.Component{
 							</TouchableHighlight>
 						</View>
 						
-						<TouchableHighlight onPress={this.handleCategory.bind(this, this.state.currentSeriesSlug)} underlayColor="transparent">
+						<TouchableHighlight underlayColor="transparent">
 							<Text style={styles.seriesTitle}>{this.state.currentModel.feed_name}</Text>
 						</TouchableHighlight>
 						<View style={styles.separator} />
-						<TouchableHighlight onPress={this.handleEpisode.bind(this)} underlayColor="transparent">
-							<Text style={styles.episode} numberOfLines={2}>WATCH: {this.state.seriesEpisode}</Text>
-						</TouchableHighlight>
-						<TouchableHighlight onPress={this.handleEpisode.bind(this)} underlayColor="transparent">
-							<Image style={{width: 60, height: 60, alignSelf: 'center', resizeMode: 'stretch', marginTop: 0}} source={{uri: 'http://www.nrafamilyinsights.org/images/button_play.png'}} />
-						</TouchableHighlight>
 						<TouchableHighlight onPress={this.handlePressPlus.bind(this)} underlayColor="transparent">
 							{seriesDescription}
 						</TouchableHighlight>
+
+						<Image style={styles.swipeDownArrow} source={require('image!swipedownarrow')}/>
+
 					</View>
 				</View>
 			</View>
@@ -368,16 +314,13 @@ class SeriesLanding extends React.Component{
           {list}
         </View>
         <View style={styles.slide2}>
-          <Text style={styles.text}>Beautiful</Text>
+          <Text style={styles.text}>TKTKTK</Text>
         </View>
         <View style={styles.slide3}>
-          <Text style={styles.text}>And simple</Text>
+          <Text style={styles.text}>TKTKTKT</Text>
         </View>
 
-
 			</Swiper>
-			
-
 		)
 	}
 };

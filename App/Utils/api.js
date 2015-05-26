@@ -64,6 +64,21 @@ var api = {
 
 	getContent(url){
 		return fetch(url).then((res) => res.json());
+	},
+
+	handleCategory(category){
+		api.getWellnessStories(category)
+			.then((res) => {
+				this.props.navigator.push({
+					component: Entries,
+					title: 'Refinery29',
+					passProps: {
+						entries: res,
+						subcat: category
+					}
+				})
+			})
+			.catch((err) => { console.log('ERROR: ' + error); })
 	}
 };
 

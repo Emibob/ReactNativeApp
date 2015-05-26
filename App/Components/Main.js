@@ -42,7 +42,7 @@ var styles = StyleSheet.create({
 		alignItems: 'center'
 	},
 	mainTitle: {
-		color: 'black', 
+		color: 'white', 
 		fontFamily: 'BrownStd-Regular', 
 		fontSize: 20, 
 		textAlign: 'center'
@@ -66,32 +66,7 @@ var styles = StyleSheet.create({
 		height: 800,
 		flex: 1,
 		resizeMode: 'cover'
-	},
-	wrapper: {
-  },
-  slide1: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#9DD6EB',
-  },
-  slide2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#97CAE5',
-  },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
-  },
-  text: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold',
-  }
+	}
 })
 
 class Main extends React.Component{
@@ -100,12 +75,12 @@ class Main extends React.Component{
 		this.state = {
 			loaded: false,
 			showDescription: false,
-			seriesList: ['Style-Out-There', 'Easy-Living-Hacks', 'Beauty-Tutorials', 'A-Cut-Above', 'Best-Style-Tips'],
+			seriesList: ['Style-Out-There', 'A-Cut-Above', 'Beauty-Tutorials', 'Hang-Time-Jenn-Im', 'Best-Style-Tips', 'Easy-Living-Hacks'],
 			mapping: {
 				'Style Out There': 'Style-Out-There',
 				//'Cupidity': 'Love-Stories',
 				//'Astrologica': 'Astrologica',
-				//'Hang Time with Jenn Im': 'Hang-Time-Jenn-Im',
+				'Hang Time with Jenn Im': 'Hang-Time-Jenn-Im',
 				'Hack Your Heart Out': 'Easy-Living-Hacks',
 				'Beauty Prep School': 'Beauty-Tutorials',
 				//'Trend Takeout': 'Trend-Takeout',
@@ -176,8 +151,7 @@ class Main extends React.Component{
 		return(
 			<View style={styles.mainContainer}>
 				<Image style={styles.backgroundImage} source={{uri: 'http://www.clker.com/cliparts/0/5/9/1/1430368724442417087yellow%20orange%20peach%20pink%20blur%20wallpaper%20android%20background%20mixed%20combiantion%20plus%20radiant%20gradient.jpg'}} />
-				<Image style={styles.image} source={{uri: 'http://s2.r29static.com/blog/q91dog/assets/images/logos/big_logo.png'}}/>
-
+				<Image style={styles.image} source={require('image!whitelogo')}/>
 				{goToSeries}
 				
 				<ActivityIndicatorIOS
@@ -185,9 +159,6 @@ class Main extends React.Component{
         style={styles.loader}
         color={'white'}
         size='large'/>
-
-        
-
 			</View>
 		)
 	}

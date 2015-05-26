@@ -37,5 +37,4 @@ class Emily extends React.Component{
   }
 };
 
-
 AppRegistry.registerComponent('Emily', () => Emily);
