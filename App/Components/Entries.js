@@ -189,6 +189,7 @@ class Entries extends React.Component{
 	}
 };
 
+
 Entries.propTypes = {
 	entries: React.PropTypes.object.isRequired
 }

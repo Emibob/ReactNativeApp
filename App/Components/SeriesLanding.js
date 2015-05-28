@@ -3,6 +3,7 @@ var helpers = require('../Utils/helpers');
 var Video = require('react-native-video');
 var Web_View = require('./Helpers/WebView');
 var Swiper = require('react-native-swiper');
+var AnimationExperimental = require('AnimationExperimental');
 
 var {
 	View,
@@ -67,7 +68,7 @@ var styles = StyleSheet.create({
 		textAlign: 'right',
 		flexDirection: 'row',
 		flex: 1,
-		alignSelf:'stretch',
+		alignSelf: 'stretch',
 		width: 160,
 		paddingRight: 15
 	},
@@ -180,6 +181,7 @@ class SeriesLanding extends React.Component{
 			fallbackImage: (firstCard.main_image) ? firstCard.main_image.src : secondCard.main_image.src
 		})
 	}
+
 
 	handlePressPlus(){
 		if (this.state.showDescription === false){

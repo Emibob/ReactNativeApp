@@ -9,6 +9,7 @@ var SeriesLanding = require('./SeriesLanding');
 var Entries = require('./Entries');
 var VideoFeed = require('./VideoFeed');
 var Swiper = require('react-native-swiper');
+var Homepage = require('./Homepage');
 
 var {
 	View,
@@ -17,7 +18,8 @@ var {
 	TouchableHighlight,
 	Image,
 	StatusBarIOS,
-	ActivityIndicatorIOS
+	ActivityIndicatorIOS,
+	ScrollView
 } = React;
 
 var styles = StyleSheet.create({
@@ -54,7 +56,8 @@ var styles = StyleSheet.create({
 		width: 130, 
 		height: 84, 
 		alignSelf: 'center',
-		marginBottom: 40
+		marginBottom: 10,
+		marginTop: 10
 	},
 	backgroundImage: {
 		position: 'absolute', 
@@ -63,7 +66,7 @@ var styles = StyleSheet.create({
 		right: 0, 
 		bottom: 0,
 		width: 800,
-		height: 800,
+		height: 170,
 		flex: 1,
 		resizeMode: 'cover'
 	}
@@ -78,18 +81,22 @@ class Main extends React.Component{
 			seriesList: ['Style-Out-There', 'A-Cut-Above', 'Beauty-Tutorials', 'Hang-Time-Jenn-Im', 'Best-Style-Tips', 'Easy-Living-Hacks'],
 			mapping: {
 				'Style Out There': 'Style-Out-There',
-				//'Cupidity': 'Love-Stories',
-				//'Astrologica': 'Astrologica',
 				'Hang Time with Jenn Im': 'Hang-Time-Jenn-Im',
 				'Hack Your Heart Out': 'Easy-Living-Hacks',
 				'Beauty Prep School': 'Beauty-Tutorials',
-				//'Trend Takeout': 'Trend-Takeout',
 				'A Cut Above': 'A-Cut-Above',
 				'Split Second Styling Tips': 'Best-Style-Tips'
-				//'Beauty Test Lab': 'Beauty-Test-Lab'
 			}
 		}
-		this.getModels() //TODO: make less gross
+		this.getModels(); //TODO: make less gross
+
+				api.getWellnessStories('video')
+					.then((res) => {
+						this.setState({
+							allVideoStories: res.result
+						})
+						this.triggerGettingAllEntries();
+					})
 	}
 
 	getModels(){
@@ -124,6 +131,30 @@ class Main extends React.Component{
 		}
 	}
 
+	// testAnimations(){
+	// 	var self = this;
+
+	// 	AnimationExperimental.startAnimation({
+ //  		node: self.refs['topLevel'],
+ //  		duration: 4000,
+ //  		easing: 'easeInQuad',
+ //  		property: 'opacity',
+ //  		toValue: 0.1,
+	// 	});
+	// 	//<View style={styles.mainContainer} ref='topLevel'>
+	// }
+
+	triggerGettingAllEntries(){
+		api.getEntrysById(this.state.allVideoStories.card_ids, {
+			cardTypes: ['entry']
+		}).then((res) => {
+			this.setState({
+				tenVideoEntries: res.result
+			})
+			console.log('all video entries', res.result);
+		})
+	}
+
 	handleEpisode(seriesSlug){
 		var list = this.state.seriesList,
 				models = this.state.allSeriesModels.slice(),
@@ -134,7 +165,6 @@ class Main extends React.Component{
 		this.props.navigator.push({
 			component: SeriesLanding,
 			title: seriesSlug,
-			//leftButtonTitle: 'Custom Back FIRST',
 			passProps: {
 				seriesSlug: first, //next series slug, mapped
 				currentModel: firstAll, //entire model of first series
@@ -148,18 +178,25 @@ class Main extends React.Component{
 
 	render(){
 		var goToSeries = (this.state.loaded) ? <TouchableHighlight onPress={this.handleEpisode.bind(this)} underlayColor="transparent"><Text style={styles.mainTitle}>Browse Video Series</Text></TouchableHighlight> : <View></View>;
+		var tenVideoEntries = (this.state.tenVideoEntries) ? <Homepage entries={this.state.tenVideoEntries}/> : <Text>Loading...</Text>;
+
 		return(
+			<ScrollView>
 			<View style={styles.mainContainer}>
-				<Image style={styles.backgroundImage} source={{uri: 'http://www.clker.com/cliparts/0/5/9/1/1430368724442417087yellow%20orange%20peach%20pink%20blur%20wallpaper%20android%20background%20mixed%20combiantion%20plus%20radiant%20gradient.jpg'}} />
-				<Image style={styles.image} source={require('image!whitelogo')}/>
-				{goToSeries}
-				
+				<View>
+					<Image style={styles.backgroundImage} source={{uri: 'http://www.clker.com/cliparts/0/5/9/1/1430368724442417087yellow%20orange%20peach%20pink%20blur%20wallpaper%20android%20background%20mixed%20combiantion%20plus%20radiant%20gradient.jpg'}} />
+					<Image style={styles.image} source={require('image!whitelogo')}/>
+					{goToSeries}
+				</View>
+				{tenVideoEntries}
+
 				<ActivityIndicatorIOS
         animating={!this.state.loaded}
         style={styles.loader}
         color={'white'}
         size='large'/>
 			</View>
+			</ScrollView>
 		)
 	}
 }

@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 var api = {
 	getBio(username){
 		username = username.toLowerCase().trim();
@@ -79,6 +81,31 @@ var api = {
 				})
 			})
 			.catch((err) => { console.log('ERROR: ' + error); })
+	},
+
+	getEntrysById(arrayofEntries, options){ //may get the array card_ids which contain entry:000,singleitem:000,multiitem:000
+		var start = options.start || 0,
+				size = options.size || 10,
+				cardTypes = options.cardTypes || ['entry', 'singleitem', 'multiitem'],
+				approvedIds = [],
+				i = 0;
+
+		while(approvedIds.length < size){
+			if(_.contains(cardTypes, 'entry') && arrayofEntries[i].match(/entry:/g)){ //if we want entry types & it is one
+				approvedIds.push(arrayofEntries[i]);
+			} 
+			if(_.contains(cardTypes, 'singleitem') && arrayofEntries[i].match(/singleitem:/g)){
+				approvedIds.push(arrayofEntries[i]);
+			} 
+			if(_.contains(cardTypes, 'multiitem') && arrayofEntries[i].match(/multiitem:/g)){
+				approvedIds.push(arrayofEntries[i]);
+			}
+			i++
+		}
+
+		url = 'http://api.refinery29.com/api/2/feeds/?ids=' + approvedIds.join(',');
+		
+		return fetch(url).then((res) => res.json());
 	}
 };
 
